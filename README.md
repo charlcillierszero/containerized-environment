@@ -25,6 +25,21 @@ podman build -t dev-environment .
 
 ## Running the Container
 
+### Using Docker Compose
+
+The easiest way to run the container is with Docker Compose:
+
+```bash
+# Start the container
+docker-compose up -d
+
+# Access the container
+docker-compose exec dev-environment bash
+
+# Stop the container
+docker-compose down
+```
+
 ### Basic Usage
 
 ```bash

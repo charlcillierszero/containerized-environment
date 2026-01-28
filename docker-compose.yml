@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  dev-environment:
+    build: .
+    image: dev-environment:latest
+    container_name: dev-environment
+    privileged: true  # Required for Podman-in-Podman
+    volumes:
+      # Mount the current directory to /workspace
+      - .:/workspace
+      # Persist container storage
+      - podman-storage:/var/lib/containers
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+volumes:
+  podman-storage:
