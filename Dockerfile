@@ -52,12 +52,12 @@ RUN GOLANG_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n1) && \
     tar -C /usr/local -xzf /tmp/go.tar.gz && \
     rm /tmp/go.tar.gz
 
-# Install Rust
+# Install Rust (using official rustup installation script)
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     . ${CARGO_HOME}/env && \
     rustup default stable
 
-# Install NVM and Node.js LTS
+# Install NVM and Node.js LTS (using official NVM installation script)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash && \
     . ${NVM_DIR}/nvm.sh && \
     nvm install --lts && \
