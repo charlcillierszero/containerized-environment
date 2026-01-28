@@ -1,5 +1,8 @@
 FROM ubuntu:noble
 
+# Use bash with pipefail for safety
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NVM_DIR=/root/.nvm
@@ -41,7 +44,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install .NET 10
-RUN wget https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
+RUN wget --progress=dot:giga https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
     chmod +x /tmp/dotnet-install.sh && \
     /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet && \
     ln -s /usr/share/dotnet/dotnet /usr/local/bin/dotnet && \
@@ -53,7 +56,7 @@ RUN dotnet workload update && \
 
 # Install Golang
 RUN GOLANG_VERSION=$(curl -s https://go.dev/VERSION?m=text | head -n1) && \
-    wget https://go.dev/dl/${GOLANG_VERSION}.linux-amd64.tar.gz -O /tmp/go.tar.gz && \
+    wget --progress=dot:giga "https://go.dev/dl/${GOLANG_VERSION}.linux-amd64.tar.gz" -O /tmp/go.tar.gz && \
     tar -C /usr/local -xzf /tmp/go.tar.gz && \
     rm /tmp/go.tar.gz
 
