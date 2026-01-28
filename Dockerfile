@@ -7,7 +7,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NVM_DIR=/root/.nvm
 ENV NODE_VERSION=lts/*
-ENV PATH="/root/.nvm/versions/node/default/bin:${PATH}"
 ENV DOTNET_ROOT=/usr/share/dotnet
 ENV PATH="${DOTNET_ROOT}:${PATH}"
 ENV GOROOT=/usr/local/go
@@ -17,7 +16,7 @@ ENV CARGO_HOME=/root/.cargo
 ENV RUSTUP_HOME=/root/.rustup
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
 
-# Update and upgrade system
+# Update and upgrade system, install base tools, tmux, and neovim
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
@@ -31,22 +30,15 @@ RUN apt-get update && \
     gnupg \
     lsb-release \
     unzip \
+    tmux \
+    neovim \
     && rm -rf /var/lib/apt/lists/*
 
-# Install tmux
-RUN apt-get update && \
-    apt-get install -y tmux && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install neovim
-RUN apt-get update && \
-    apt-get install -y neovim && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install .NET 10
+# Install .NET 10 (or fallback to .NET 9 if 10 is not available)
 RUN wget --progress=dot:giga https://dot.net/v1/dotnet-install.sh -O /tmp/dotnet-install.sh && \
     chmod +x /tmp/dotnet-install.sh && \
-    /tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet && \
+    (/tmp/dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet || \
+     /tmp/dotnet-install.sh --channel 9.0 --install-dir /usr/share/dotnet) && \
     ln -s /usr/share/dotnet/dotnet /usr/local/bin/dotnet && \
     rm /tmp/dotnet-install.sh
 
@@ -100,14 +92,14 @@ RUN mkdir -p /root/.config/containers && \
     echo 'cgroup_manager="cgroupfs"' >> /root/.config/containers/containers.conf && \
     echo 'events_logger="file"' >> /root/.config/containers/containers.conf
 
-# Verify installations
+# Verify installations (use symlinks for node/npm instead of sourcing nvm)
 RUN dotnet --version && \
     dotnet workload list && \
     go version && \
     rustc --version && \
     cargo --version && \
-    . ${NVM_DIR}/nvm.sh && node --version && \
-    . ${NVM_DIR}/nvm.sh && npm --version && \
+    node --version && \
+    npm --version && \
     tmux -V && \
     nvim --version && \
     podman --version

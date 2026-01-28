@@ -5,7 +5,7 @@ A comprehensive development environment container based on Ubuntu Noble with mod
 ## Included Tools and Languages
 
 - **Base Image**: Ubuntu Noble (24.04 LTS)
-- **.NET 10**: Latest .NET SDK with Aspire workload
+- **.NET 10**: Latest .NET SDK with Aspire workload (falls back to .NET 9 if 10 is not available)
 - **Golang**: Latest stable version
 - **Rust**: Latest stable toolchain via rustup
 - **Node.js**: Latest LTS version via NVM
