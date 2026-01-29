@@ -88,9 +88,14 @@ RUN mkdir -p ~/.local/share/fonts \
 
 # Install nvim
 RUN apt-get update -y \
-    && apt-get install -y neovim \
+    && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
+    && tar -C /opt -xzf nvim-linux-x86_64.tar.gz \
+    && rm -rf ./nvim-linux-x86_64.tar.gz \
+    && echo "export PATH=\$PATH:/opt/nvim-linux-x86_64/bin" >> ~/.bashrc \
     && git clone https://github.com/LazyVim/starter ~/.config/nvim \
     && rm -rf ~/.config/nvim/.git
+
+WORKDIR /root
 
 # Default command
 CMD ["/bin/bash"]
