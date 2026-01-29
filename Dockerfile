@@ -16,6 +16,15 @@ ENV CARGO_HOME=/root/.cargo
 ENV RUSTUP_HOME=/root/.rustup
 ENV PATH="${CARGO_HOME}/bin:${PATH}"
 
+# Add aliases
+RUN echo "alias cls='clear'" >> ~/.bash_aliases \
+    && echo "alias c='clear'" >> ~/.bash_aliases \
+    && echo "alias fix-apt-get='echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null'" >> ~/.bash_aliases \
+    && echo "alias vim='nvim'" >> ~/.bash_aliases \
+    && echo "alias goto-config='cd /home/charl/.config/'" >> ~/.bash_aliases \
+    && echo "alias reload-bashrc='. ~/.bashrc'" >> ~/.bash_aliases \
+    && echo "alias go-home='cd ~'" >> ~/.bash_aliases
+
 # Update and upgrade system
 RUN apt-get update \
     && apt-get upgrade -y
@@ -52,12 +61,6 @@ RUN add-apt-repository ppa:dotnet/backports \
 RUN apt-get update -y \
     && apt-get install -y podman
 
-# Install nvim
-RUN apt-get update -y \
-    && apt-get install -y neovim \
-    && git clone https://github.com/LazyVim/starter ~/.config/nvim \
-    && rm -rf ~/.config/nvim/.git
-
 # Install tmux
 RUN apt-get install -y tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -83,14 +86,11 @@ RUN mkdir -p ~/.local/share/fonts \
     && rm JetBrainsMono.zip \
     && fc-cache -fv
 
-# Add aliases
-RUN echo "alias cls='clear'" >> ~/.bash_aliases \
-    && echo "alias c='clear'" >> ~/.bash_aliases \
-    && echo "alias fix-apt-get='echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null'" >> ~/.bash_aliases \
-    && echo "alias vim='nvim'" >> ~/.bash_aliases \
-    && echo "alias goto-config='cd /home/charl/.config/'" >> ~/.bash_aliases \
-    && echo "alias reload-bashrc='. ~/.bashrc'" >> ~/.bash_aliases \
-    && echo "alias go-home='cd ~'" >> ~/.bash_aliases
+# Install nvim
+RUN apt-get update -y \
+    && apt-get install -y neovim \
+    && git clone https://github.com/LazyVim/starter ~/.config/nvim \
+    && rm -rf ~/.config/nvim/.git
 
 # Default command
 CMD ["/bin/bash"]
