@@ -1,0 +1,24 @@
+services:
+  dev-environment:
+    build: .
+    image: dev-environment:latest
+    container_name: dev-environment
+    privileged: true  # Required for Podman-in-Podman
+    volumes:
+      # Persist container storage
+      - podman-storage:/var/lib/containers
+      # Mount Neovim plugins
+      - nvim-plugins:/root/.local/share/nvim
+      # Git credentials
+      # - git-credentials:/root/.git
+      # Repos
+      - repos:/root/repos
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+volumes:
+  podman-storage:
+  nvim-plugins:
+  # git-credentials:
+  repos:
