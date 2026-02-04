@@ -10,7 +10,7 @@ services:
       # Mount Neovim plugins
       - nvim-plugins:/root/.local/share/nvim
       # Git credentials
-      # - git-credentials:/root/.git
+      - git-credentials:/root/.ssh
       # Repos
       - repos:/root/repos
     stdin_open: true
@@ -20,5 +20,5 @@ services:
 volumes:
   podman-storage:
   nvim-plugins:
-  # git-credentials:
+  git-credentials:
   repos:

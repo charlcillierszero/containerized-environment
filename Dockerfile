@@ -3,19 +3,6 @@ FROM ubuntu:noble
 # Use bash with pipefail for safety
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
-ENV NVM_DIR=/root/.nvm
-ENV NODE_VERSION=lts/*
-ENV DOTNET_ROOT=/usr/share/dotnet
-ENV PATH="${DOTNET_ROOT}:${PATH}"
-ENV GOROOT=/usr/local/go
-ENV GOPATH=/root/go
-ENV PATH="${GOROOT}/bin:${GOPATH}/bin:${PATH}"
-ENV CARGO_HOME=/root/.cargo
-ENV RUSTUP_HOME=/root/.rustup
-ENV PATH="${CARGO_HOME}/bin:${PATH}"
-
 # Add aliases
 RUN echo "alias cls='clear'" >> ~/.bash_aliases \
     && echo "alias c='clear'" >> ~/.bash_aliases \
@@ -48,8 +35,7 @@ RUN apt-get install -y fontconfig
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
-    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
-    && node -v
+    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Install .NET SDK
 RUN add-apt-repository ppa:dotnet/backports \
