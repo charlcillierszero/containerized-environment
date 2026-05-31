@@ -95,6 +95,9 @@ RUN apt-get update -y \
     && git clone https://github.com/LazyVim/starter ~/.config/nvim \
     && rm -rf ~/.config/nvim/.git
 
+# Install Java 17 and Maven
+RUN apt-get install -y openjdk-17-jdk maven
+
 WORKDIR /root
 
 # Default command
